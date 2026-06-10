@@ -14,11 +14,15 @@
     flake-utils.lib.eachDefaultSystem (
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
+
+	go-migrate-postgres = pkgs.go-migrate.overrideAttrs (old: {
+					tags = [ "postgres" ];
+				});
       in {
-        devShells = {
+        devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
             go
-            go-migrate
+            go-migrate-postgres
           ];
         };
       }
