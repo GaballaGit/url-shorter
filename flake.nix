@@ -15,9 +15,9 @@
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
 
-	go-migrate-postgres = pkgs.go-migrate.overrideAttrs (old: {
-					tags = [ "postgres" ];
-				});
+        go-migrate-postgres = pkgs.go-migrate.overrideAttrs (old: {
+          tags = ["postgres"];
+        });
       in {
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
