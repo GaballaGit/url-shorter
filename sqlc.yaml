@@ -1,0 +1,13 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "sql/querries/"
+    schema: "sql/migrations/"
+    database:
+      uri: "postgresql://localhost:5432/taskdb"
+    rules:
+      - sqlc/db-prepare
+    gen:
+      go:
+        out: "internal/api/dbservices"
+        sql_package: "pgx/v5"

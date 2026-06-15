@@ -23,6 +23,7 @@
           buildInputs = with pkgs; [
             go
             go-migrate-postgres
+            sqlc
           ];
         };
       }
