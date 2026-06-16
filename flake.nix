@@ -25,6 +25,10 @@
             go-migrate-postgres
             sqlc
           ];
+
+          shellHook = ''
+            echo "[ Entered Nix Shell ]"
+          '';
         };
       }
     );
