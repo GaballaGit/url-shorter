@@ -3,13 +3,13 @@ package services
 import (
 	"context"
 
-	"url-shorter/internal/api/dbservices"
+	"url-shorter/internal/api/dto"
 	"url-shorter/internal/api/repository"
 )
 
 type ShortlinkServicer interface {
 	Get(ctx context.Context, shortlink string)
-	Post(ctx context.Context, args dbservices.InsertLinkParams)
+	Post(ctx context.Context, args dto.ShortlinkDto)
 	Delete(ctx context.Context, url string)
 }
 
@@ -29,8 +29,7 @@ func (s *ShortlinkService) Get(ctx context.Context, shortlink string) {
 	s.r.Get(ctx, shortlink)
 }
 
-func (s *ShortlinkService) Post(ctx context.Context, args dbservices.InsertLinkParams) {
-	// TODO: use a domain model here instead of db service
+func (s *ShortlinkService) Post(ctx context.Context, args dto.ShortlinkDto) {
 	s.r.Post(ctx, args)
 }
 func (s *ShortlinkService) Delete(ctx context.Context, shortlink string) {

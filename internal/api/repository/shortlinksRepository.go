@@ -4,11 +4,12 @@ import (
 	"context"
 
 	"url-shorter/internal/api/dbservices"
+	"url-shorter/internal/api/domain"
 )
 
 type ShortlinkRepository interface {
 	Get(ctx context.Context, shortlink string)
-	Post(ctx context.Context, args dbservices.InsertLinkParams)
+	Post(ctx context.Context, args domain.ShortlinkDomain)
 	Delete(ctx context.Context, url string)
 }
 
@@ -28,8 +29,9 @@ func (r *ShortlinkRepo) Get(ctx context.Context, shortlink string) {
 	r.db.GetUrl(ctx, shortlink)
 }
 
-func (r *ShortlinkRepo) Post(ctx context.Context, args dbservices.InsertLinkParams) {
-	r.db.InsertLink(ctx, args)
+func (r *ShortlinkRepo) Post(ctx context.Context, args domain.ShortlinkDomain) {
+	// TODO: conv to db model
+	r.db.InsertLink(ctx, args.)
 }
 func (r *ShortlinkRepo) Delete(ctx context.Context, shortlink string) {
 	r.db.DeleteUrl(ctx, shortlink)
