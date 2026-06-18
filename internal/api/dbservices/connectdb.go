@@ -5,17 +5,16 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func ConnectDB(ctx context.Context, logger slog.Logger) *pgx.Conn {
+func ConnectDB(ctx context.Context, logger slog.Logger) *pgxpool.Pool {
 
-	conn, err := pgx.Connect(ctx, os.Getenv("DATABASE_URL"))
+	pool, err := pgxpool.New(ctx, os.Getenv("DATABASE_URL"))
 	if err != nil {
 		logger.Error("error opening database:" + err.Error())
 		os.Exit(1)
 	}
-	defer conn.Close(ctx)
 
-	return conn
+	return pool
 }

@@ -12,6 +12,8 @@ import (
 	"time"
 
 	"url-shorter/internal/api/dbservices"
+
+	"github.com/go-playground/locales/lo"
 )
 
 const (
@@ -30,9 +32,8 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 12*time.Second)
 	defer cancel()
 
-	// TODO: switch to pgxpool instead of connection in ConnectDB
-	psqlConn := dbservices.ConnectDB(ctx, logger)
-	db := dbservices.New()
+	pool := dbservices.ConnectDB(ctx, *logger)
+	defer pool.Close()
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {})
