@@ -43,7 +43,7 @@ func (sl *ShortlinkHandler) PostUrlHandler(w http.ResponseWriter, r *http.Reques
 	sl.shortlinkService.Post(ctx, newlink)
 }
 
-func (sl *ShortlinkHandler) DeleteUrlHandler(w http.ResponseWriter, r *http.Response) {
+func (sl *ShortlinkHandler) DeleteUrlHandler(w http.ResponseWriter, r *http.Request) {
 	url := r.Header.Get("url")
 
 	ctx := context.Background()

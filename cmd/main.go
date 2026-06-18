@@ -12,8 +12,9 @@ import (
 	"time"
 
 	"url-shorter/internal/api/dbservices"
-
-	"github.com/go-playground/locales/lo"
+	"url-shorter/internal/api/handlers"
+	"url-shorter/internal/api/repository"
+	"url-shorter/internal/api/services"
 )
 
 const (
@@ -29,14 +30,23 @@ func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	slog.SetDefault(logger)
 
+	// DB Pool
 	ctx, cancel := context.WithTimeout(context.Background(), 12*time.Second)
 	defer cancel()
 
 	pool := dbservices.ConnectDB(ctx, *logger)
 	defer pool.Close()
+	tx := dbservices.ConnectDBTX(ctx, *logger)
+
+	db := dbservices.New(pool).WithTx(*tx)
+	slR := repository.NewShortlinkRepo(*db)
+	slS := services.NewShortlinkService(slR)
+	slH := handlers.NewHandler(*slS)
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {})
+	mux.HandleFunc("POST /{id}", slH.PostUrlHandler)
+	mux.HandleFunc("GET /{id}", slH.GetUrlHandler)
+	mux.HandleFunc("DELETE /{id}", slH.DeleteUrlHandler)
 
 	// TODO: Middleware for mux
 
