@@ -5,12 +5,19 @@ import (
 	"encoding/json"
 	"net/http"
 	"time"
+
 	"url-shorter/internal/api/dto"
 	"url-shorter/internal/api/services"
 )
 
 type ShortlinkHandler struct {
 	shortlinkService services.ShortlinkService
+}
+
+func NewHandler(slService services.ShortlinkService) *ShortlinkHandler {
+	return &ShortlinkHandler{
+		shortlinkService: slService,
+	}
 }
 
 func (sl *ShortlinkHandler) GetUrlHandler(w http.ResponseWriter, r *http.Request) {
@@ -34,4 +41,12 @@ func (sl *ShortlinkHandler) PostUrlHandler(w http.ResponseWriter, r *http.Reques
 	defer cancel()
 
 	sl.shortlinkService.Post(ctx, newlink)
+}
+
+func (sl *ShortlinkHandler) DeleteUrlHandler(w http.ResponseWriter, r *http.Response) {
+	url := r.Header.Get("url")
+
+	ctx := context.Background()
+
+	sl.shortlinkService.Delete(ctx, url)
 }

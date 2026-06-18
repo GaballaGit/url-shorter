@@ -10,11 +10,15 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"url-shorter/internal/api/dbservices"
 )
 
-const YELLOW = "\x1b[33m"
-const END_COLOR = "\x1b[0m"
-const DEV_PORT = "8080"
+const (
+	YELLOW    = "\x1b[33m"
+	END_COLOR = "\x1b[0m"
+	DEV_PORT  = "8080"
+)
 
 func main() {
 	fmt.Println(YELLOW + "[ STARTING SERVER ]" + END_COLOR)
@@ -22,6 +26,13 @@ func main() {
 	// logging
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	slog.SetDefault(logger)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 12*time.Second)
+	defer cancel()
+
+	// TODO: switch to pgxpool instead of connection in ConnectDB
+	psqlConn := dbservices.ConnectDB(ctx, logger)
+	db := dbservices.New()
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {})

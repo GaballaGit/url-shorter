@@ -30,8 +30,9 @@ func (s *ShortlinkService) Get(ctx context.Context, shortlink string) {
 }
 
 func (s *ShortlinkService) Post(ctx context.Context, args dto.ShortlinkDto) {
-	s.r.Post(ctx, args)
+	s.r.Post(ctx, *args.ToDomain())
 }
+
 func (s *ShortlinkService) Delete(ctx context.Context, shortlink string) {
 	s.r.Delete(ctx, shortlink)
 }

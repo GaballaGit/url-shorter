@@ -31,8 +31,9 @@ func (r *ShortlinkRepo) Get(ctx context.Context, shortlink string) {
 
 func (r *ShortlinkRepo) Post(ctx context.Context, args domain.ShortlinkDomain) {
 	// TODO: conv to db model
-	r.db.InsertLink(ctx, args.)
+	r.db.InsertLink(ctx, *args.ToDB())
 }
+
 func (r *ShortlinkRepo) Delete(ctx context.Context, shortlink string) {
 	r.db.DeleteUrl(ctx, shortlink)
 }
